@@ -9,6 +9,7 @@ const editorEvents = [
   'beforePreviewRender',
   'beforeConvertWysiwygToMarkdown',
 ];
+
 const defaultValueMap = {
   initialEditType: 'markdown',
   initialValue: '',
@@ -25,6 +26,7 @@ export const optionsMixin = {
         this.$emit(event, ...args);
       };
     });
+
     const options = {
       ...this.options,
       initialEditType: this.initialEditType,
@@ -42,21 +44,29 @@ export const optionsMixin = {
 
     return { editor: null, computedOptions: options };
   },
+
   methods: {
     invoke(methodName, ...args) {
-      let result = null;
-      console.log(this.editor)
-      if (this.editor[methodName]) {
-        result = this.editor[methodName](...args);
+      if (!this.editor) {
+        console.warn('Editor is not initialized');
+        return null;
       }
 
-      return result;
-    },
+      if (typeof this.editor[methodName] !== 'function') {
+        console.warn(`Method ${methodName} is not available`);
+        return null;
+      }
+
+      return this.editor[methodName](...args);
+    }
   },
-  destroyed() {
-    editorEvents.forEach((event) => {
-      this.editor.off(event);
-    });
-    this.editor.destroy();
-  },
+
+  beforeDestroy() {
+    if (this.editor) {
+      editorEvents.forEach((event) => {
+        this.editor.off(event);
+      });
+      this.editor.destroy();
+    }
+  }
 };
