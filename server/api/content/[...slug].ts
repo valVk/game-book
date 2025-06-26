@@ -17,8 +17,7 @@ export default defineEventHandler(async (event) => {
 
   // Безопасный путь к файлам
   const contentPath = path.join(process.cwd(), 'sections', [slug.padStart(3, '0'), 'md'].join('.'))
-  console.log(slug.padStart(3, '0'))
-  console.log(contentPath)
+
   try {
     const content = await readFile(contentPath, 'utf-8')
 

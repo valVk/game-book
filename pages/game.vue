@@ -1,14 +1,12 @@
 <script setup lang="ts">
-
-const route = useRoute()
 import { DiceRoll } from '@dice-roller/rpg-dice-roller';
+const route = useRoute()
 
 const roll = new DiceRoll('1d6');
 const dice = ref(roll.total)
-const currentPage = ref('001')
+const currentPage = ref('preface')
 
 const changePage = (page: string) => {
-  console.log(page)
   currentPage.value = page;
 };
 </script>

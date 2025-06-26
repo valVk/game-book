@@ -1,17 +1,20 @@
 <template>
   <ToastuiEditorViewer
     ref="toastuiEditor"
-    :initial-value="data"
+    :initial-value="content"
     @load="onEditorLoad"
-    @change="onEditorChange"
   />
+  <p>checkLuck: {{ checkLuck }}</p>
+  <p>checkCharisma: {{ checkCharisma }}</p>
 </template>
 
 <script setup lang="ts">
 const emit = defineEmits(['change-page'])
 const props = defineProps(['page'])
 const toastuiEditor = ref()
-const data = ref('')
+const content = ref('')
+const checkLuck = ref(false);
+const checkCharisma = ref(false);
 
 const onEditorLoad = (editor: any) => {
   // console.log('Editor loaded', editor.preview.getHTML())
@@ -35,8 +38,10 @@ const handleClick = (event: MouseEvent) => {
 
 // Initial data fetch
 const fetchContent = async (page: string) => {
-  const { data: content } = await useFetch(`/api/content/${page}`)
-  data.value = content.value || ''
+  const { data } = await useFetch(`/api/content/${page}`)
+  content.value = data.value || ''
+  checkLuck.value = content.value.includes('ПРОВЕРЬТЕ СВОЮ УДАЧУ')
+  checkCharisma.value = content.value.includes('Проверьте свое ОБАЯНИЕ')
 }
 
 // Watch for page prop changes
