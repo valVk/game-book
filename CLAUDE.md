@@ -123,3 +123,12 @@ For complete game rules, character creation, combat system, and mechanics, see [
 - Test charisma system progression (success/failure scenarios)
 - Mock dice rolls for predictable testing
 - Always test localStorage persistence for character data
+
+## Copyright and Legal Compliance
+- **Story Content**: All content in `/sections/` directory is copyrighted material
+- **Code Attribution**: Technical implementation is MIT licensed (see LICENSE file)
+- **Respect Copyright**: Never modify original story content without proper attribution
+- **Educational Use**: This project is for educational and personal use only
+- **No Commercial Use**: Content cannot be used commercially without permission
+- **Attribution Required**: Always credit both original author and technical implementation
+- **Documentation**: See COPYRIGHT.md for complete legal information

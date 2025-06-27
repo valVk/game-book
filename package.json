@@ -1,6 +1,9 @@
 {
-  "name": "nuxt-app",
+  "name": "rpg-game-book-demo",
   "private": true,
+  "license": "UNLICENSED",
+  "description": "Personal digital implementation of RPG game book for educational purposes",
+  "author": "valVK",
   "type": "module",
   "scripts": {
     "build": "nuxt build",
