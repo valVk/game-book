@@ -114,20 +114,37 @@
 
 ---
 
-<div style="text-align: center; margin: 2rem 0;">
+<div style="text-align: center; margin: 3rem 0;">
   <a href="001" style="
     display: inline-block;
-    background: linear-gradient(45deg, #2196F3, #21CBF3);
-    color: white !important;
+    background: linear-gradient(135deg, #8B4513, #A0522D);
+    color: #2d2926 !important;
     text-decoration: none !important;
-    padding: 16px 32px;
-    font-size: 18px;
-    font-weight: bold;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    padding: 20px 40px;
+    font-size: 1.3rem;
+    font-weight: 600;
+    font-family: 'Cinzel', serif;
+    letter-spacing: 0.5px;
+    border: 2px solid #d4c5a9;
+    border-radius: 12px;
+    box-shadow: 
+      0 6px 20px rgba(139, 69, 19, 0.3),
+      inset 0 1px 0 rgba(255, 255, 255, 0.2);
     transition: all 0.3s ease;
-    min-width: 200px;
-  " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 12px rgba(0,0,0,0.3)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 8px rgba(0,0,0,0.2)'">
-    🎮 Начать приключение
+    min-width: 280px;
+    text-shadow: 0 1px 2px rgba(255, 255, 255, 0.3);
+    background-image: 
+      radial-gradient(circle at 20% 30%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+      radial-gradient(circle at 80% 70%, rgba(139, 129, 108, 0.1) 0%, transparent 50%);
+  " onmouseover="
+    this.style.transform='translateY(-3px)'; 
+    this.style.boxShadow='0 8px 25px rgba(139, 69, 19, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.3)';
+    this.style.background='linear-gradient(135deg, #A0522D, #CD853F)';
+  " onmouseout="
+    this.style.transform='translateY(0)'; 
+    this.style.boxShadow='0 6px 20px rgba(139, 69, 19, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2)';
+    this.style.background='linear-gradient(135deg, #8B4513, #A0522D)';
+  ">
+    ⚔️ Начать приключение
   </a>
 </div>

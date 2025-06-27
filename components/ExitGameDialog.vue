@@ -137,8 +137,135 @@ const cancel = () => {
 </script>
 
 <style scoped>
-.v-card {
-  border-radius: 16px;
+:deep(.v-overlay__content) {
+  margin: 0 !important;
+}
+
+:deep(.v-overlay .v-overlay__content) {
+  background: transparent !important;
+}
+
+:deep(.v-dialog) {
+  background: transparent !important;
+}
+
+:deep(.v-dialog .v-card) {
+  background: var(--parchment-bg) !important;
+  background-color: var(--parchment-bg) !important;
+  border: 2px solid var(--aged-border) !important;
+  border-radius: 16px !important;
+  box-shadow: 
+    0 12px 48px var(--parchment-shadow),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8) !important;
+  font-family: var(--fantasy-font-body) !important;
+  color: var(--ink-color) !important;
+  position: relative;
+  overflow: hidden;
+}
+
+:deep(.v-card) {
+  background: var(--parchment-bg) !important;
+  background-color: var(--parchment-bg) !important;
+}
+
+:deep(.v-dialog .v-card::before) {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 20% 30%, rgba(139, 129, 108, 0.05) 0%, transparent 50%),
+    radial-gradient(circle at 80% 70%, rgba(139, 129, 108, 0.05) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+:deep(.v-dialog .v-card > *) {
+  position: relative;
+  z-index: 1;
+}
+
+:deep(.v-card-title) {
+  font-family: var(--fantasy-font-headers) !important;
+  font-weight: 500 !important;
+  color: var(--ink-color) !important;
+  background: rgba(255, 183, 183, 0.2) !important;
+  border-bottom: 2px solid rgba(244, 67, 54, 0.3) !important;
+  letter-spacing: 0.5px !important;
+  font-size: 1.4rem !important;
+}
+
+:deep(.v-card-text) {
+  font-family: var(--fantasy-font-body) !important;
+  color: var(--ink-color) !important;
+  background: transparent !important;
+}
+
+:deep(.v-card-text p) {
+  font-size: 1.1rem !important;
+  line-height: 1.6 !important;
+  margin-bottom: 1rem !important;
+  color: var(--ink-color) !important;
+}
+
+:deep(.v-card-text *) {
+  color: var(--ink-color) !important;
+  font-family: var(--fantasy-font-body) !important;
+}
+
+:deep(.v-dialog .v-card p) {
+  font-family: var(--fantasy-font-body) !important;
+  color: var(--ink-color) !important;
+}
+
+:deep(.v-dialog .v-card .v-card-text) {
+  font-family: var(--fantasy-font-body) !important;
+}
+
+:deep(.text-body-1) {
+  color: var(--ink-color) !important;
+  font-family: var(--fantasy-font-body) !important;
+}
+
+:deep(.text-caption) {
+  color: var(--ink-color) !important;
+  font-family: var(--fantasy-font-body) !important;
+}
+
+:deep(.text-grey) {
+  color: var(--ink-color) !important;
+  opacity: 0.7;
+  font-family: var(--fantasy-font-body) !important;
+}
+
+:deep(.v-dialog .v-card .text-h6) {
+  color: var(--ink-color) !important;
+  font-family: var(--fantasy-font-headers) !important;
+}
+
+:deep(.v-dialog .v-card .text-h5) {
+  color: var(--ink-color) !important;
+  font-family: var(--fantasy-font-headers) !important;
+}
+
+:deep(.v-alert) {
+  background: rgba(255, 193, 7, 0.1) !important;
+  border: 2px solid rgba(255, 193, 7, 0.4) !important;
+  border-radius: 10px !important;
+  box-shadow: 0 2px 8px rgba(255, 193, 7, 0.2) !important;
+}
+
+:deep(.v-alert .v-alert__content) {
+  font-family: var(--fantasy-font-body) !important;
+  color: var(--ink-color) !important;
+}
+
+:deep(.v-alert strong) {
+  font-family: var(--fantasy-font-headers) !important;
+  font-weight: 600 !important;
+  color: var(--ink-color) !important;
 }
 
 .game-summary {
@@ -146,11 +273,111 @@ const cancel = () => {
   margin: 0 auto;
 }
 
+:deep(.v-card--variant-outlined) {
+  border: 2px solid var(--aged-border) !important;
+  background: rgba(212, 197, 169, 0.1) !important;
+  border-radius: 10px !important;
+}
+
+:deep(.v-card--variant-outlined .v-card-title) {
+  background: rgba(212, 197, 169, 0.2) !important;
+  border-bottom: 1px solid var(--aged-border) !important;
+  font-family: var(--fantasy-font-headers) !important;
+  font-weight: 500 !important;
+  color: var(--ink-color) !important;
+}
+
+:deep(.v-card--variant-outlined .v-card-text) {
+  background: transparent !important;
+}
+
+:deep(.text-caption) {
+  font-family: var(--fantasy-font-headers) !important;
+  font-weight: 500 !important;
+  color: rgba(45, 41, 38, 0.7) !important;
+  letter-spacing: 0.5px !important;
+  text-transform: uppercase !important;
+  font-size: 0.75rem !important;
+}
+
+:deep(.text-body-2) {
+  font-family: var(--fantasy-font-body) !important;
+  color: #8B4513 !important;
+  font-weight: 600 !important;
+  font-size: 1rem !important;
+}
+
+:deep(.v-card-actions) {
+  background: rgba(212, 197, 169, 0.2) !important;
+  border-top: 2px solid var(--aged-border) !important;
+  padding: 20px !important;
+}
+
+:deep(.v-btn) {
+  font-family: var(--fantasy-font-headers) !important;
+  font-weight: 500 !important;
+  letter-spacing: 0.3px !important;
+  border-radius: 10px !important;
+  text-transform: none !important;
+  box-shadow: 0 4px 12px rgba(139, 69, 19, 0.15) !important;
+  transition: all 0.3s ease !important;
+  padding: 12px 24px !important;
+}
+
+:deep(.v-btn:hover) {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 6px 16px rgba(139, 69, 19, 0.25) !important;
+}
+
+:deep(.v-btn--variant-outlined) {
+  background: var(--parchment-bg) !important;
+  color: var(--ink-color) !important;
+  border-color: var(--aged-border) !important;
+  border-width: 2px !important;
+}
+
+:deep(.v-btn--variant-outlined:hover) {
+  background: rgba(212, 197, 169, 0.3) !important;
+  border-color: #8B4513 !important;
+}
+
+:deep(.v-btn[color="red"]) {
+  background: linear-gradient(135deg, #d32f2f, #f44336) !important;
+  color: white !important;
+  border: none !important;
+}
+
+:deep(.v-btn[color="red"]:hover) {
+  background: linear-gradient(135deg, #f44336, #ff5722) !important;
+}
+
 ul {
-  padding-left: 20px;
+  padding-left: 24px;
+  font-family: var(--fantasy-font-body);
 }
 
 li {
-  margin-bottom: 4px;
+  margin-bottom: 6px;
+  color: var(--ink-color);
+  line-height: 1.5;
+}
+
+@media (max-width: 768px) {
+  :deep(.v-dialog .v-card) {
+    margin: 1rem !important;
+    border-radius: 12px !important;
+  }
+  
+  :deep(.v-card-title) {
+    font-size: 1.2rem !important;
+  }
+  
+  :deep(.v-card-text p) {
+    font-size: 1rem !important;
+  }
+  
+  .game-summary {
+    max-width: 100%;
+  }
 }
 </style>

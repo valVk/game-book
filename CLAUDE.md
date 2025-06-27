@@ -108,6 +108,47 @@ For complete game rules, character creation, combat system, and mechanics, see [
 - localStorage data should be validated on load
 - Ensure dice rolls are truly random (not predictable)
 
+## UI/UX Design Guidelines
+
+### Fantasy Book Theme
+The application uses a comprehensive fantasy book aesthetic with the following style system:
+
+#### Color Palette
+- **Primary Background**: `--parchment-bg: #f4f1e8` (aged parchment)
+- **Text Color**: `--ink-color: #2d2926` (dark ink)
+- **Border/Accent**: `--aged-border: #d4c5a9` (aged paper borders)
+- **Link Color**: `#8B4513` (fantasy brown)
+- **Shadow**: `--parchment-shadow: rgba(139, 129, 108, 0.2)`
+
+#### Typography
+- **Headers**: `'Cormorant Garamond', 'Cinzel', serif` (fantasy decorative font with Cyrillic support)
+- **Body Text**: `'Crimson Text', serif` (readable book font with Cyrillic support)
+- **Font Sizes**: 1.1rem base, larger headers, justified text with text-indent
+- **Letter Spacing**: 0.5px for headers, proper line-height for readability
+- **Cyrillic Support**: Both fonts support Russian and other Cyrillic scripts
+
+#### Component Styling Standards
+- **Paper-like containers**: Parchment background with aged borders and subtle shadows
+- **Floating elements**: Character sheet positioned bottom-right with mobile responsiveness
+- **Modal dialogs**: Must use parchment background, dark ink text, and fantasy borders
+- **Buttons**: Fantasy brown gradients with hover effects and proper text contrast
+- **Links**: Fantasy brown with underlines and hover animations
+
+#### Mobile Responsiveness
+- **Character Sheet**: Full-width when expanded, compact when collapsed on mobile
+- **Content**: Reduced margins and padding on smaller screens
+- **Typography**: Adjusted font sizes and text-indent for mobile readability
+
+### Styling Implementation Rules
+1. **Always use CSS variables** for colors (defined in app.vue)
+2. **Apply fantasy fonts** to all new components using `var(--fantasy-font-headers)` and `var(--fantasy-font-body)`
+3. **Ensure proper contrast** - dark ink on light parchment backgrounds
+4. **Use :deep() selectors** to override Vuetify component styles
+5. **Add texture overlays** with radial gradients for paper effect
+6. **Implement hover animations** for interactive elements
+7. **Override Vuetify text classes** - Use `font-family: var(--fantasy-font-body) !important` on `.text-body-1`, `.text-caption`, etc.
+8. **Comprehensive font targeting** - Apply `font-family` to all text elements: `*`, `p`, `.v-card-text *` for complete coverage
+
 ## Performance Guidelines
 - Lazy load sections to avoid loading all 600+ markdown files
 - Use Vue's `<ClientOnly>` for localStorage-dependent components
