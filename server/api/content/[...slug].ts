@@ -16,12 +16,30 @@ export default defineEventHandler(async (event) => {
   }
 
   // Безопасный путь к файлам
-  const contentPath = path.join(process.cwd(), 'sections', [slug.padStart(3, '0'), 'md'].join('.'))
+  let fileName = slug
+
+  // Handle special cases
+  if (fileName === 'preface') {
+    fileName = 'preface.md'
+  } else {
+    // For numbered sections, ensure 3-digit format
+    fileName = `${slug.padStart(3, '0')}.md`
+  }
+
+  const contentPath = path.join(process.cwd(), 'sections', fileName)
 
   try {
     const content = await readFile(contentPath, 'utf-8')
 
-    return content
+    // Check for game over by looking for numbered navigation links in markdown
+    const hasGameLinks = checkForGameLinks(content)
+    const isGameOver = slug !== 'preface' && !hasGameLinks
+
+    return {
+      content,
+      isGameOver,
+      hasLinks: hasGameLinks
+    }
 
   } catch (error) {
     console.log(error)
@@ -31,3 +49,24 @@ export default defineEventHandler(async (event) => {
     })
   }
 })
+
+// Helper function to detect navigation links in markdown content
+function checkForGameLinks(content: string): boolean {
+  // Look for the specific format: [**89**](#n_89) or [**230**](#n_230)
+  const gameLinkRegex = /\[\*\*(\d+)\*\*\]\(#n_\d+\)/g
+  
+  // Also check for simpler variants: [89](#n_89) or [230](#n_230)  
+  const simpleLinkRegex = /\[(\d+)\]\(#n_\d+\)/g
+  
+  // Check for HTML anchor links: <a href="#n_89">89</a>
+  const htmlAnchorRegex = /<a[^>]+href\s*=\s*["']#n_\d+["'][^>]*>/gi
+  
+  const hasGameLinks = gameLinkRegex.test(content)
+  const hasSimpleLinks = simpleLinkRegex.test(content)
+  const hasHtmlAnchors = htmlAnchorRegex.test(content)
+  
+  const result = hasGameLinks || hasSimpleLinks || hasHtmlAnchors
+  console.log(`Game links detection for content preview: "${content.substring(0, 100)}..." - Found links: ${result}`)
+  
+  return result
+}
