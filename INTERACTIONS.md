@@ -17,7 +17,7 @@ Based on analysis of all 632 files in the `/sections/` directory, the game featu
 **Implementation:** Look for the specific phrase "ПРОВЕРЬТЕ СВОЮ УДАЧУ" in content
 
 ### ⚔️ **COMBAT/FIGHT SCENES**
-**44+ sections:** 016, 028, 038, 049, 068, 072, 083, 104, 128, 145, 146, 172, 180, 186, 203, 234, 269, 274, 293, 310, 328, 372, 378, 402, 405, 417, 423, 472, 480, 520, 541, 550, 566, 595, 622, 623, and others
+**37 sections:** 016, 028, 038, 049, 068, 072, 083, 104, 105, 125, 128, 145, 146, 172, 180, 186, 203, 234, 254, 269, 274, 293, 310, 328, 372, 378, 380, 402, 405, 417, 423, 472, 480, 520, 541, 550, 566, 595, 622, 623
 
 **Combat Types:**
 - **Psychic Combat:** Mental battles with telepathic enemies (016, 083, 049)
@@ -38,8 +38,8 @@ Based on analysis of all 632 files in the `/sections/` directory, the game featu
 **Implementation:** Look for "ОБАЯНИЕ" keyword in content
 
 ### 🏃 **STAT CHECKS**
-**Agility (ЛОВКОСТЬ):** 35+ sections for dodging, climbing, precision tasks
-**Strength (СИЛА):** 86+ sections for physical challenges, endurance tests
+**Agility (ЛОВКОСТЬ):** 37 sections for dodging, climbing, precision tasks (same as combat sections)
+**Strength (СИЛА):** 77 sections - 016, 021, 026, 028, 038, 042, 044, 046, 049, 068, 072, 083, 102, 104, 111, 112, 128, 138, 145, 146, 164, 172, 180, 186, 194, 203, 232, 234, 235, 237, 269, 274, 278, 291, 293, 310, 328, 343, 348, 372, 378, 380, 385, 402, 404, 405, 417, 423, 429, 430, 452, 465, 472, 480, 482, 486, 495, 515, 520, 528, 533, 537, 541, 546, 555, 566, 569, 570, 574, 576, 593, 595, 610, 622, 623, 625, preface
 
 **Purpose:** Test player character's physical capabilities
 **Mechanics:** Various thresholds and calculations based on current stat values
@@ -47,7 +47,7 @@ Based on analysis of all 632 files in the `/sections/` directory, the game featu
 **Critical:** Strength reaching 0 means character death
 
 ### 🍖 **FOOD USAGE/MANAGEMENT**
-**49+ sections:** 024, 114, 119, 154, 157, 166, 168, 184, 226, 228, 238, 239, 244, 268, 275, 288, 301, 317, 322, 325, 331, 357, 358, 370, 371, 441, 456, 463, 475, 482, 497, 499, 516, 525, 527, 538, 558, 560, 575, 594, 599, 605, 616, 624, 625, 632, and others
+**49+ sections:** 005, 024, 044, 099, 114, 119, 154, 157, 166, 168, 184, 226, 228, 238, 239, 244, 268, 275, 288, 301, 317, 322, 325, 331, 357, 358, 370, 371, 383, 441, 456, 463, 475, 482, 497, 499, 503, 516, 525, 527, 538, 558, 560, 575, 594, 599, 605, 616, 624, 625, 632, preface, and others
 
 **Mechanics:**
 - Each food portion restores 4 Strength points
@@ -74,7 +74,7 @@ Based on analysis of all 632 files in the `/sections/` directory, the game featu
 **Strategic Value:** Allows players to recover between dangerous encounters
 
 ### 🎯 **DICE MECHANICS**
-**37+ sections:** 029, 060, 062, 067, 094, 125, 145, 171, 212, 213, 217, 256, 262, 276, 278, 285, 316, 418, 423, 490, 548, 561, 566, 573, 594, 614, and others
+**68 sections:** 028, 029, 038, 060, 062, 067, 068, 072, 094, 104, 105, 119, 125, 128, 145, 153, 159, 171, 172, 178, 180, 186, 194, 203, 212, 213, 217, 234, 254, 256, 262, 276, 278, 283, 285, 293, 316, 328, 330, 340, 341, 372, 374, 378, 380, 400, 402, 404, 405, 417, 418, 423, 472, 480, 490, 512, 520, 541, 548, 550, 561, 566, 573, 582, 594, 595, 614, 622, 623, preface
 
 **Applications:**
 - Random events and outcome determination
@@ -86,7 +86,7 @@ Based on analysis of all 632 files in the `/sections/` directory, the game featu
 **Implementation:** Uses standard d6 dice rolling mechanics throughout
 
 ### 🧠 **MENTAL POWER/TELEPATHY**
-**37+ sections:** 016, 021, 026, 046, 049, 055, 060, 083, 129, 154, 184, 225, 258, 266, 293, 372, 380, 410, 423, 429, 468, 480, 482, 515, 530, 533, 542, 546, 591, 622, 623, and others
+**67 sections:** 009, 010, 016, 021, 026, 046, 049, 055, 060, 063, 065, 078, 080, 083, 100, 110, 129, 138, 154, 166, 184, 200, 208, 211, 225, 228, 244, 258, 262, 266, 268, 269, 292, 293, 298, 322, 341, 350, 355, 362, 372, 380, 391, 400, 404, 410, 423, 429, 430, 445, 448, 456, 462, 468, 475, 480, 482, 486, 488, 492, 503, 515, 519, 530, 533, 539, 542, 546, 547, 562, 565, 591, 595, 599, 602, 607, 610, 616, 622, 623, 624, 630, 632, preface
 
 **Unique Magic System:**
 - Telepathic combat with mental enemies
@@ -98,7 +98,7 @@ Based on analysis of all 632 files in the `/sections/` directory, the game featu
 **Gameplay Role:** Secondary magic system alongside physical combat
 
 ### 💰 **ECONOMIC INTERACTIONS**
-**36+ sections:** 002, 015, 046, 094, 132, 154, 157, 168, 184, 212, 222, 250, 275, 288, 301, and others
+**42 sections:** 002, 015, 046, 094, 132, 154, 157, 166, 168, 184, 212, 222, 250, 275, 288, 301, 316, 317, 322, 330, 331, 347, 358, 371, 374, 423, 436, 440, 456, 475, 480, 485, 502, 508, 512, 527, 599, 605, 616, 624, 626, preface
 
 **Economic Elements:**
 - Purchasing food, equipment, and services
@@ -355,11 +355,12 @@ The game emphasizes:
 
 ## Frequency Analysis
 
-1. **Combat:** 44+ sections (most frequent - core gameplay loop)
-2. **Food Management:** 49+ sections (critical survival mechanic)
-3. **Mental Power:** 37+ sections (unique magical system)
-4. **Dice Mechanics:** 37+ sections (randomization and uncertainty)
-5. **Economic:** 36+ sections (resource trading and management)
+1. **Strength Checks:** 77 sections (most frequent - core physical challenges)
+2. **Dice Mechanics:** 68 sections (randomization and uncertainty)
+3. **Mental Power:** 67 sections (unique magical system)
+4. **Food Management:** 49+ sections (critical survival mechanic)
+5. **Economic:** 42 sections (resource trading and management)
+6. **Combat:** 37 sections (core gameplay loop)
 6. **Inventory/Equipment:** 25+ sections (item discovery, trading, strategic choices)
 7. **Rest/Healing:** 26+ sections (strategic recovery)
 8. **Luck Checks:** 15 sections (high-stakes moments)
