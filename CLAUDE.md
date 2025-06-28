@@ -53,6 +53,7 @@ npm run generate     # Generate static site
 - `server/api/content/[...slug].ts` - Content loading and game state detection
 - `pages/game/index.vue` - Main game interface and navigation handling
 - `sections/` directory - Game content in numbered markdown files
+- `INTERACTIONS.md` - Comprehensive analysis of all game mechanics and interactions
 
 ### Game Flow
 1. Character creation with dice-rolled stats
@@ -69,6 +70,8 @@ Game sections use specific markdown formatting:
 
 ## Game Rules & Mechanics
 For complete game rules, character creation, combat system, and mechanics, see [RULES.md](./RULES.md).
+
+For detailed analysis of all game interactions and mechanics by type, see [INTERACTIONS.md](./INTERACTIONS.md).
 
 ### Character Creation Process
 1. Roll 2d6 and consult the stats table (see RULES.md)
@@ -100,6 +103,7 @@ For complete game rules, character creation, combat system, and mechanics, see [
 - Content not displaying: Check server/api/content/[...slug].ts for path resolution
 - Stats not matching: Verify STATS_TABLE in useCharacter.ts matches RULES.md table
 - Luck system issues: Check luck array initialization in useCharacter.ts
+- Game mechanics not triggering: Reference INTERACTIONS.md for correct keyword patterns
 
 ## Security Considerations
 - Never log character data to console in production
