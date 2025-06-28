@@ -47,7 +47,48 @@ p {
 
 /* Paper book container styling */
 .v-application {
-  background: transparent !important;
+  background: transparent;
+}
+
+/* Fantasy theme classes for Vuetify components */
+.fantasy-header {
+  font-family: var(--fantasy-font-headers);
+  color: var(--ink-color);
+  letter-spacing: 0.5px;
+}
+
+.fantasy-body {
+  font-family: var(--fantasy-font-body);
+  color: var(--ink-color);
+}
+
+.fantasy-body * {
+  font-family: var(--fantasy-font-body);
+  color: var(--ink-color);
+}
+
+.fantasy-button {
+  font-family: var(--fantasy-font-headers);
+  font-weight: 500;
+  letter-spacing: 0.3px;
+  text-transform: none;
+}
+
+.fantasy-dialog {
+  background: var(--parchment-bg);
+  border: 2px solid var(--aged-border);
+  border-radius: 16px;
+}
+
+/* Override Vuetify typography classes to use fantasy fonts */
+.text-h1, .text-h2, .text-h3, .text-h4, .text-h5, .text-h6 {
+  font-family: var(--fantasy-font-headers) !important;
+  color: var(--ink-color) !important;
+}
+
+.text-body-1, .text-body-2, .text-caption, .text-subtitle-1, .text-subtitle-2 {
+  font-family: var(--fantasy-font-body) !important;
+  color: var(--ink-color) !important;
 }
 
 /* Links styling for book navigation */

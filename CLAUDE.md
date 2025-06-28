@@ -140,14 +140,23 @@ The application uses a comprehensive fantasy book aesthetic with the following s
 - **Typography**: Adjusted font sizes and text-indent for mobile readability
 
 ### Styling Implementation Rules
-1. **Always use CSS variables** for colors (defined in app.vue)
-2. **Apply fantasy fonts** to all new components using `var(--fantasy-font-headers)` and `var(--fantasy-font-body)`
-3. **Ensure proper contrast** - dark ink on light parchment backgrounds
-4. **Use :deep() selectors** to override Vuetify component styles
-5. **Add texture overlays** with radial gradients for paper effect
-6. **Implement hover animations** for interactive elements
-7. **Override Vuetify text classes** - Use `font-family: var(--fantasy-font-body) !important` on `.text-body-1`, `.text-caption`, etc.
-8. **Comprehensive font targeting** - Apply `font-family` to all text elements: `*`, `p`, `.v-card-text *` for complete coverage
+
+#### Vuetify Theme Configuration (Preferred Method)
+1. **Use Vuetify theme system** - Configure fantasy theme in `nuxt.config.ts` with custom colors
+2. **Apply component defaults** - Use Vuetify's `defaults` to set fantasy classes automatically
+3. **Define fantasy classes** - Create `.fantasy-header`, `.fantasy-body`, `.fantasy-button` in app.vue
+4. **CSS Variables** - Always use CSS variables for colors (defined in app.vue)
+
+#### Legacy Override Method (Avoid when possible)
+5. **Use :deep() selectors** only when Vuetify theme system is insufficient
+6. **Minimize !important** - Only use when absolutely necessary for overriding
+7. **Add texture overlays** with radial gradients for paper effect
+8. **Implement hover animations** for interactive elements
+
+#### Font Implementation
+- **Headers**: Apply `var(--fantasy-font-headers)` via `.fantasy-header` class
+- **Body Text**: Apply `var(--fantasy-font-body)` via `.fantasy-body` class
+- **Automatic Application**: Vuetify defaults ensure classes are applied automatically
 
 ## Performance Guidelines
 - Lazy load sections to avoid loading all 600+ markdown files
