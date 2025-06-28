@@ -286,6 +286,40 @@ export const useCharacter = () => {
     endGameSession()
   }
 
+  // Debug mode functions
+  const resetToDebugState = () => {
+    // Generate random stats for debug testing
+    const rollResult = rollStats()
+    const luckRolls = initializeLuck()
+    
+    // Set up debug character state
+    character.value.gameStartTime = Date.now()
+    character.value.currentPage = 'debug'
+    character.value.visitedPages = ['debug']
+    character.value.gold = 15
+    character.value.food = 3
+    character.value.inventory = ['Food (3 days)', 'Sword', 'Backpack (7 slots)']
+    character.value.mentalPower = 3
+    
+    isCharacterCreated.value = true
+    saveCharacter()
+    
+    return { rollResult, luckRolls }
+  }
+
+  const getAvailableLuckPoints = () => {
+    return character.value.luck.reduce((count, available) => count + (available ? 1 : 0), 0)
+  }
+
+  const setDebugStats = (agility: number, strength: number, charisma: number) => {
+    character.value.agility = Math.max(1, Math.min(agility, 12))
+    character.value.strength = Math.max(1, Math.min(strength, 24))
+    character.value.charisma = Math.max(1, Math.min(charisma, 12))
+    character.value.maxAgility = character.value.agility
+    character.value.maxStrength = character.value.strength
+    saveCharacter()
+  }
+
   // Initialize character state on first call
   initializeCharacter()
 
@@ -315,6 +349,10 @@ export const useCharacter = () => {
     getGold,
     setGold,
     getFood,
-    setFood
+    setFood,
+    // Debug functions
+    resetToDebugState,
+    getAvailableLuckPoints,
+    setDebugStats
   }
 }
