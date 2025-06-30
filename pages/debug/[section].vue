@@ -284,14 +284,32 @@ const interactionType = computed(() => {
 const onEditorLoad = (editor: any) => {
   editor.preview.previewContent.addEventListener('click', handleClick)
   toastuiEditor.value = editor
+  
+  // Process dice roll sections after editor loads for debug page
+  processEditorContent()
 }
 
 const handleClick = (event: MouseEvent) => {
   if (toastuiEditor.value) {
     const target = event.target as HTMLElement
+    
+    // Handle dice roll button clicks
+    if (target.classList.contains('luck-roll-btn')) {
+      event.preventDefault()
+      handleLuckRoll()
+      return
+    }
+    
     const link = target.closest('a')
     if (link) {
       event.preventDefault()
+      
+      // Check if this link is blocked by pending dice roll
+      if (link.classList.contains('blocked-link')) {
+        showToast('You must roll the dice first!', 'warning')
+        return
+      }
+      
       const href = link.getAttribute('href')
       if (href) {
         // Extract page ID from href (e.g., "001", "#n_89", etc.)
@@ -303,6 +321,267 @@ const handleClick = (event: MouseEvent) => {
   }
 }
 
+// Process editor content to add dice roll functionality (using server metadata)
+const processEditorContent = () => {
+  if (!toastuiEditor.value || !content.value) return
+  
+  const editorContent = toastuiEditor.value.preview.previewContent
+  const diceRollData = content.value.diceRoll
+  
+  console.log('Processing editor content for section:', currentSection.value)
+  console.log('Server dice roll metadata:', diceRollData)
+  
+  // Check if dice roll is required based on server metadata
+  if (diceRollData?.required === 'luck' && diceRollData.successLink && diceRollData.failureLink) {
+    const currentPageId = currentSection.value
+    let pendingRoll = character.getPendingRoll(currentPageId)
+    const availableLuckPoints = character.getAvailableLuckPoints()
+    
+    console.log('Dice roll required - pending roll state:', pendingRoll)
+    console.log('Available luck points:', availableLuckPoints)
+    
+    // Only reset if there's no pending roll (first time on this page)
+    // Don't reset if roll is already completed - preserve the result and styling
+    if (!pendingRoll) {
+      console.log('Creating new pending roll for first time visit')
+      character.setPendingRoll(currentPageId, 'luck')
+      pendingRoll = character.getPendingRoll(currentPageId)
+    }
+    
+    // Check if player has no luck points available - auto-fail
+    if (availableLuckPoints === 0) {
+      console.log('No luck points available - auto-failing')
+      // Set auto-fail result
+      character.setPendingRoll(currentPageId, 'luck')
+      const autoFailResult = character.checkLuck(currentPageId)
+      autoFailResult.lucky = false // Force failure
+      
+      // Update the pending roll with failure result
+      character.character._value.pendingRolls[currentPageId] = {
+        type: 'luck',
+        result: false,
+        timestamp: Date.now()
+      }
+      
+      // Show only failure link
+      showResultBasedLinks(editorContent, diceRollData.successLink, diceRollData.failureLink, false)
+      
+      // Add auto-fail message
+      addAutoFailMessage(editorContent)
+      return
+    }
+    
+    if (!pendingRoll || pendingRoll.result === undefined) {
+      // Set pending roll if not already set
+      if (!pendingRoll) {
+        character.setPendingRoll(currentPageId, diceRollData.required)
+      }
+      
+      // Block ALL navigation links initially and add dice roll button
+      blockLinksAndAddDiceRoll(editorContent, diceRollData.successLink, diceRollData.failureLink)
+    } else {
+      // Roll completed, show appropriate link based on result
+      showResultBasedLinks(editorContent, diceRollData.successLink, diceRollData.failureLink, pendingRoll.result)
+    }
+  }
+}
+
+// Add auto-fail message to the page
+const addAutoFailMessage = (container: HTMLElement) => {
+  const luckText = container.querySelector('p')
+  if (luckText && luckText.textContent?.includes('ПРОВЕРЬТЕ СВОЮ УДАЧУ')) {
+    const autoFailDiv = document.createElement('div')
+    autoFailDiv.className = 'auto-fail-message'
+    autoFailDiv.style.cssText = `
+      text-align: center;
+      margin: 1rem 0;
+      padding: 1rem;
+      background: rgba(125, 45, 26, 0.1);
+      border: 2px solid #A0432F;
+      border-radius: 8px;
+      font-family: var(--fantasy-font-headers);
+      font-weight: 600;
+      color: #7D2D1A;
+    `
+    autoFailDiv.innerHTML = `
+      <p>🎲 У вас не осталось очков удачи!</p>
+      <p style="font-size: 1.1rem; margin-top: 0.5rem;">
+        ❌ Удача автоматически не на вашей стороне!
+      </p>
+    `
+    
+    luckText.appendChild(autoFailDiv)
+  }
+}
+
+// Block navigation links and add dice roll interface
+const blockLinksAndAddDiceRoll = (container: HTMLElement, successLink: string, failureLink: string) => {
+  console.log('Blocking links for success:', successLink, 'failure:', failureLink)
+  
+  // Find and block the luck-related links
+  const links = container.querySelectorAll('a')
+  console.log('Found links:', links.length)
+  
+  let blockedCount = 0
+  links.forEach(link => {
+    const href = link.getAttribute('href')
+    console.log('Checking link:', href)
+    if (href?.includes(`#n_${successLink}`) || href?.includes(`#n_${failureLink}`)) {
+      console.log('Blocking link:', href)
+      
+      // Make link look like regular text (disabled state)
+      link.classList.add('blocked-link')
+      link.style.cssText = `
+        color: var(--ink-color) !important;
+        text-decoration: none !important;
+        pointer-events: none !important;
+        cursor: text !important;
+        font-weight: normal !important;
+        background: none !important;
+        font-family: var(--fantasy-font-body) !important;
+        opacity: 1 !important;
+      `
+      blockedCount++
+    }
+  })
+  
+  console.log('Blocked', blockedCount, 'links')
+  
+  // Find the luck check text and add dice roll button
+  const luckText = container.querySelector('p')
+  if (luckText && luckText.textContent?.includes('ПРОВЕРЬТЕ СВОЮ УДАЧУ')) {
+    // Check if button already exists to prevent duplicates
+    const existingButton = container.querySelector('.luck-roll-btn')
+    if (existingButton) {
+      console.log('Dice button already exists, skipping creation')
+      return
+    }
+    
+    const diceButton = document.createElement('button')
+    diceButton.className = 'luck-roll-btn fantasy-button'
+    diceButton.innerHTML = '🎲 Проверить удачу'
+    diceButton.style.cssText = `
+      display: block;
+      margin: 1rem auto;
+      padding: 0.75rem 1.5rem;
+      background: linear-gradient(135deg, #8B4513 0%, #A0522D 100%);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-family: var(--fantasy-font-headers);
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 8px rgba(139, 69, 19, 0.3);
+    `
+    
+    luckText.appendChild(diceButton)
+  }
+}
+
+// Show links based on dice roll result
+const showResultBasedLinks = (container: HTMLElement, successLink: string, failureLink: string, success: boolean) => {
+  const links = container.querySelectorAll('a')
+  links.forEach(link => {
+    const href = link.getAttribute('href')
+    const isSuccessLink = href?.includes(`#n_${successLink}`)
+    const isFailureLink = href?.includes(`#n_${failureLink}`)
+    
+    if ((success && isSuccessLink) || (!success && isFailureLink)) {
+      // Show the appropriate link with paper-like styling
+      link.classList.remove('blocked-link')
+      const linkColor = success ? '#2D5016' : '#7D2D1A' // Dark green or dark red for paper effect
+      const bgColor = success ? 'rgba(45, 80, 22, 0.1)' : 'rgba(125, 45, 26, 0.1)'
+      const borderColor = success ? '#4A6B2F' : '#A0432F'
+      
+      link.style.cssText = `
+        color: ${linkColor} !important;
+        text-decoration: underline !important;
+        pointer-events: auto !important;
+        cursor: pointer !important;
+        font-weight: 600 !important;
+        font-family: var(--fantasy-font-headers) !important;
+        background: ${bgColor} !important;
+        padding: 2px 6px !important;
+        border-radius: 4px !important;
+        border: 1px solid ${borderColor} !important;
+        box-shadow: 0 2px 4px rgba(139, 129, 108, 0.2) !important;
+        transition: all 0.3s ease !important;
+      `
+      
+      // Add hover effect
+      link.addEventListener('mouseenter', () => {
+        link.style.background = success ? 'rgba(45, 80, 22, 0.2)' : 'rgba(125, 45, 26, 0.2)'
+        link.style.transform = 'translateY(-1px)'
+      })
+      
+      link.addEventListener('mouseleave', () => {
+        link.style.background = bgColor
+        link.style.transform = 'translateY(0)'
+      })
+    } else if (isSuccessLink || isFailureLink) {
+      // Keep other link as disabled text (don't hide it)
+      link.style.cssText = `
+        color: var(--ink-color) !important;
+        text-decoration: none !important;
+        pointer-events: none !important;
+        cursor: text !important;
+        font-weight: normal !important;
+        background: none !important;
+        font-family: var(--fantasy-font-body) !important;
+        opacity: 0.5 !important;
+      `
+    }
+  })
+  
+  // Remove dice roll button if it exists
+  const diceButton = container.querySelector('.luck-roll-btn')
+  if (diceButton) {
+    diceButton.remove()
+  }
+}
+
+// Handle luck roll button click
+const handleLuckRoll = () => {
+  const currentPageId = currentSection.value
+  const result = character.checkLuck(currentPageId)
+  
+  // Show result immediately
+  showToast(`🎲 Rolled: ${result.roll} - ${result.lucky ? '✅ LUCKY!' : '❌ UNLUCKY!'}`, result.lucky ? 'success' : 'error')
+  
+  // Reprocess content to show result
+  nextTick(() => {
+    processEditorContent()
+    
+    // Add result display to the page
+    const editorContent = toastuiEditor.value.preview.previewContent
+    const resultDiv = document.createElement('div')
+    resultDiv.className = 'dice-result'
+    resultDiv.style.cssText = `
+      text-align: center;
+      margin: 1rem 0;
+      padding: 1rem;
+      background: ${result.lucky ? 'rgba(34, 139, 34, 0.1)' : 'rgba(178, 34, 34, 0.1)'};
+      border: 2px solid ${result.lucky ? '#228B22' : '#B22222'};
+      border-radius: 8px;
+      font-family: var(--fantasy-font-headers);
+      font-weight: 600;
+    `
+    resultDiv.innerHTML = `
+      <p>🎲 Выпало: ${result.roll}</p>
+      <p style="font-size: 1.2rem; margin-top: 0.5rem;">
+        ${result.lucky ? '✅ Удача на вашей стороне!' : '❌ Удача отвернулась от вас!'}
+      </p>
+    `
+    
+    const luckText = editorContent.querySelector('p')
+    if (luckText) {
+      luckText.appendChild(resultDiv)
+    }
+  })
+}
+
 // Utility functions
 const showToast = (text: string, color = 'info') => {
   snackbar.value = { show: true, text, color }
@@ -312,6 +591,13 @@ const showToast = (text: string, color = 'info') => {
 const resetCharacter = () => {
   character.resetToDebugState()
   showToast('Character reset for debug testing', 'success')
+  
+  // Reprocess content after reset to refresh dice roll state
+  nextTick(() => {
+    if (toastuiEditor.value && content.value) {
+      processEditorContent()
+    }
+  })
 }
 
 const toggleDebugMode = () => {
@@ -319,11 +605,16 @@ const toggleDebugMode = () => {
 }
 
 const rollLuck = () => {
-  const roll = new DiceRoll('1d6').total
+  const currentPageId = currentSection.value
+  const result = character.checkLuck(currentPageId)
   const availableLuck = character.getAvailableLuckPoints()
-  const isLucky = character.character._value.luck[roll - 1]
 
-  showToast(`Luck Roll: ${roll} - ${isLucky ? 'LUCKY!' : 'UNLUCKY'} (Available: ${availableLuck})`)
+  showToast(`🎲 Luck Roll: ${result.roll} - ${result.lucky ? '✅ LUCKY!' : '❌ UNLUCKY!'} (Available: ${availableLuck})`, result.lucky ? 'success' : 'error')
+  
+  // Trigger the enhanced luck system processing
+  nextTick(() => {
+    processEditorContent()
+  })
 }
 
 const rollCharisma = () => {
@@ -347,6 +638,24 @@ watch(currentSection, (newSection) => {
     navigationHistory.value.push(newSection)
   }
 }, { immediate: true })
+
+// Watch for content changes to reprocess editor
+watch(content, () => {
+  if (content.value && toastuiEditor.value) {
+    nextTick(() => {
+      processEditorContent()
+    })
+  }
+}, { immediate: true })
+
+// Also watch for section changes to clear any previous state
+watch(currentSection, () => {
+  if (toastuiEditor.value && content.value) {
+    nextTick(() => {
+      processEditorContent()
+    })
+  }
+})
 
 // Page metadata
 useHead({

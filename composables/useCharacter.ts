@@ -14,6 +14,11 @@ export interface CharacterStats {
   currentPage: string // Current game page
   visitedPages: string[] // Pages visited during this session
   gameStartTime: number // When the game session started
+  pendingRolls: Record<string, {
+    type: 'luck' | 'charisma' | 'combat'
+    result?: boolean
+    timestamp: number
+  }>
 }
 
 // Character stats table based on 2d6 roll
@@ -48,7 +53,8 @@ const defaultCharacter: CharacterStats = {
   mentalPower: 3,
   currentPage: 'preface',
   visitedPages: [],
-  gameStartTime: 0
+  gameStartTime: 0,
+  pendingRolls: {}
 }
 
 // Global reactive character state (singleton)
@@ -69,11 +75,19 @@ const initializeCharacter = () => {
     try {
       const parsedCharacter = JSON.parse(stored)
       console.log('Parsed character data:', parsedCharacter)
+      
+      // Migrate old character data to include pendingRolls if missing
+      if (!parsedCharacter.pendingRolls) {
+        console.log('Migrating character data: adding pendingRolls')
+        parsedCharacter.pendingRolls = {}
+      }
+      
       character.value = parsedCharacter
       isCharacterCreated.value = parsedCharacter.gameStartTime > 0 // Character has started journey
       console.log('Character initialized:', {
         agility: character.value.agility,
-        isCharacterCreated: isCharacterCreated.value
+        isCharacterCreated: isCharacterCreated.value,
+        hasPendingRolls: !!character.value.pendingRolls
       })
     } catch (e) {
       console.error('Failed to parse stored character:', e)
@@ -131,17 +145,73 @@ export const useCharacter = () => {
   }
 
   // Check luck - returns true if lucky, false if unlucky
-  const checkLuck = (): { lucky: boolean; roll: number } => {
+  const checkLuck = (pageId?: string): { lucky: boolean; roll: number } => {
     const roll = new DiceRoll('1d6').total
     const lucky = character.value.luck[roll - 1]
     
     if (lucky) {
       // Mark this luck as used
       character.value.luck[roll - 1] = false
-      saveCharacter()
     }
     
+    // Track the roll result if pageId provided
+    if (pageId) {
+      // Ensure pendingRolls exists
+      if (!character.value.pendingRolls) {
+        character.value.pendingRolls = {}
+      }
+      
+      // Update existing pending roll with result
+      if (character.value.pendingRolls[pageId]) {
+        character.value.pendingRolls[pageId].result = lucky
+      } else {
+        // Create new entry if it doesn't exist
+        character.value.pendingRolls[pageId] = {
+          type: 'luck',
+          result: lucky,
+          timestamp: Date.now()
+        }
+      }
+    }
+    
+    saveCharacter()
     return { lucky, roll }
+  }
+
+  // Set pending roll for a page
+  const setPendingRoll = (pageId: string, type: 'luck' | 'charisma' | 'combat') => {
+    // Ensure pendingRolls exists
+    if (!character.value.pendingRolls) {
+      character.value.pendingRolls = {}
+    }
+    
+    character.value.pendingRolls[pageId] = {
+      type,
+      timestamp: Date.now()
+      // result is undefined initially (not rolled yet)
+    }
+    saveCharacter()
+  }
+
+  // Get pending roll status
+  const getPendingRoll = (pageId: string) => {
+    // Ensure pendingRolls exists
+    if (!character.value.pendingRolls) {
+      character.value.pendingRolls = {}
+      return undefined
+    }
+    return character.value.pendingRolls[pageId]
+  }
+
+  // Clear pending roll
+  const clearPendingRoll = (pageId: string) => {
+    // Ensure pendingRolls exists
+    if (!character.value.pendingRolls) {
+      character.value.pendingRolls = {}
+      return
+    }
+    delete character.value.pendingRolls[pageId]
+    saveCharacter()
   }
 
   // Restore a luck point
@@ -301,6 +371,9 @@ export const useCharacter = () => {
     character.value.inventory = ['Food (3 days)', 'Sword', 'Backpack (7 slots)']
     character.value.mentalPower = 3
     
+    // Clear all pending rolls for fresh testing
+    character.value.pendingRolls = {}
+    
     isCharacterCreated.value = true
     saveCharacter()
     
@@ -334,6 +407,10 @@ export const useCharacter = () => {
     restoreLuck,
     testCharisma,
     useFood,
+    // Pending rolls
+    setPendingRoll,
+    getPendingRoll,
+    clearPendingRoll,
     // Page tracking
     navigateToPage,
     getCurrentPage,

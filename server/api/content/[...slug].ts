@@ -34,11 +34,15 @@ export default defineEventHandler(async (event) => {
     // Check for game over by looking for numbered navigation links in markdown
     const hasGameLinks = checkForGameLinks(content)
     const isGameOver = slug !== 'preface' && !hasGameLinks
+    
+    // Parse dice roll metadata from HTML comments
+    const diceRollMetadata = parseDiceRollMetadata(content)
 
     return {
       content,
       isGameOver,
-      hasLinks: hasGameLinks
+      hasLinks: hasGameLinks,
+      diceRoll: diceRollMetadata
     }
 
   } catch (error) {
@@ -69,4 +73,47 @@ function checkForGameLinks(content: string): boolean {
   console.log(`Game links detection for content preview: "${content.substring(0, 100)}..." - Found links: ${result}`)
   
   return result
+}
+
+// Helper function to parse dice roll metadata from HTML comments
+function parseDiceRollMetadata(content: string) {
+  const metadata: {
+    required?: 'luck' | 'charisma' | 'combat'
+    successLink?: string
+    failureLink?: string
+    hasLuckCheck?: boolean
+    hasCharisma?: boolean
+    hasCombat?: boolean
+  } = {}
+
+  // Check for dice roll requirement comment
+  const diceRollMatch = content.match(/<!-- DICE_ROLL_REQUIRED: (\w+) -->/)
+  if (diceRollMatch) {
+    metadata.required = diceRollMatch[1] as 'luck' | 'charisma' | 'combat'
+  }
+
+  // Check for success/failure links
+  const successMatch = content.match(/<!-- LUCK_SUCCESS_LINK: (\d+) -->/)
+  if (successMatch) {
+    metadata.successLink = successMatch[1]
+  }
+
+  const failureMatch = content.match(/<!-- LUCK_FAILURE_LINK: (\d+) -->/)
+  if (failureMatch) {
+    metadata.failureLink = failureMatch[1]
+  }
+
+  // Also check for content-based indicators (fallback)
+  metadata.hasLuckCheck = /ПРОВЕРЬТЕ СВОЮ УДАЧУ/i.test(content)
+  metadata.hasCharisma = /Проверьте свое ОБАЯНИЕ/i.test(content)
+  metadata.hasCombat = /ЛОВКОСТЬ.*\d+/i.test(content)
+
+  // If we have HTML comments, those take priority
+  if (metadata.required) {
+    if (metadata.required === 'luck') metadata.hasLuckCheck = true
+    if (metadata.required === 'charisma') metadata.hasCharisma = true
+    if (metadata.required === 'combat') metadata.hasCombat = true
+  }
+
+  return metadata
 }

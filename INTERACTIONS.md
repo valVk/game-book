@@ -9,12 +9,52 @@ Based on analysis of all 632 files in the `/sections/` directory, the game featu
 ## Interaction Classifications
 
 ### 🎲 **LUCK CHECKS (ПРОВЕРЬТЕ СВОЮ УДАЧУ)**
-**15 sections:** 037, 067, 165, 249, 319, 399, 420, 483, 500, 506, 531, 568, 604, 612, 627
+**42+ sections total with comprehensive luck system**
+
+#### **Standard Luck Checks (35+ sections):**
+037, 067, 165, 249, 319, 399, 420, 483, 500, 506, 531, 568, 604, 612, 627, plus additional sections containing "ПРОВЕРЬТЕ СВОЮ УДАЧУ" pattern
 
 **Purpose:** High-stakes random events that test player fortune
-**Mechanics:** Players roll dice and compare against their luck stat
-**Usage Pattern:** Sparingly used for critical moments and dangerous situations
+**Mechanics:** Roll 1d6, if number already marked = unlucky
+**Usage Pattern:** Critical moments, dangerous situations, fate-determining events
 **Implementation:** Look for the specific phrase "ПРОВЕРЬТЕ СВОЮ УДАЧУ" in content
+
+#### **Luck Restoration System (6 sections):**
+- **094** - Gnome's Reduction Spell effect: `бросить кубик и почистить один из квадратов УДАЧИ`
+- **063** - Magic Belt activation: `бросить кубик и почистить один из квадратов УДАЧИ`
+- **212** - Meeting Gnomes encounter: `можете бросить кубик и почистить один из квадратов УДАЧИ`
+- **548** - Magic Ring with Topaz effect: `бросить кубик и почистить один из квадратов УДАЧИ`
+- **341** - Magic Belt usage in danger: `бросить кубик и почистить один из квадратов УДАЧИ`
+- **340** - Bard's Song magical effect: `бросить кубик и почистить один из квадратов УДАЧИ`
+
+**Purpose:** Strategic luck recovery through magical items and NPC encounters
+**Mechanics:** Roll dice and restore one luck point (mark square as available)
+**Triggers:** Magic items (belts, rings), NPC assistance (gnomes, bards), story rewards
+
+#### **Luck Penalty/Skip Mechanics (1 section):**
+- **213** - Moral Choice Penalty: `В первый раз, когда будет предложено ПРОВЕРИТЬ СВОЮ УДАЧУ, можете не бросать кубик: считайте, что Удача отвернулась от вас`
+
+**Purpose:** Consequences for moral failures and poor character choices
+**Mechanics:** Automatic luck failure without dice roll
+**Trigger:** Failing to help fellow traveler in combat (moral consequence system)
+
+#### **Narrative Luck References (Multiple sections):**
+- **276** - `пожелав удачи, продолжает путь` (wishing luck)
+- **413** - `выпить немного вина за удачу в путешествиях` (drinking to luck)
+- **085** - `Поблагодарив богов за то, что Удача была с вами` (thanking gods for luck)
+- **329** - `не можете рассчитывать на удачу` (cannot count on luck)
+- **064** - `Но Удача изменяет вам` (luck betrays you)
+- **199** - `Поскольку вы неудачливы` (because you are unlucky)
+- **326** - `а УДАЧА отвернулась от вас` (luck turned away from you)
+
+**Purpose:** Atmospheric flavor text and narrative integration
+**Mechanics:** Story elements that reference luck without mechanical effects
+
+#### **Luck System Rules (preface.md):**
+- **Initial Setup:** Roll 2d6 at character creation, mark those squares as "used"
+- **Check Mechanism:** Roll 1d6 during luck checks, marked numbers = unlucky
+- **Restoration Rule:** Specific story events allow luck point recovery
+- **Integration:** Luck affects combat outcomes, exploration success, story progression
 
 ### ⚔️ **COMBAT/FIGHT SCENES**
 **37 sections:** 016, 028, 038, 049, 068, 072, 083, 104, 105, 125, 128, 145, 146, 172, 180, 186, 203, 234, 254, 269, 274, 293, 310, 328, 372, 378, 380, 402, 405, 417, 423, 472, 480, 520, 541, 550, 566, 595, 622, 623
@@ -363,7 +403,7 @@ The game emphasizes:
 6. **Combat:** 37 sections (core gameplay loop)
 6. **Inventory/Equipment:** 25+ sections (item discovery, trading, strategic choices)
 7. **Rest/Healing:** 26+ sections (strategic recovery)
-8. **Luck Checks:** 15 sections (high-stakes moments)
+8. **Luck System:** 42+ sections (comprehensive luck mechanics with checks, restoration, penalties)
 9. **Environmental Hazards:** 10+ sections (desert survival, weather effects)
 10. **Gambling System:** 5 sections (dice betting with NPCs)
 11. **Charisma:** 4 sections (specialized social path)

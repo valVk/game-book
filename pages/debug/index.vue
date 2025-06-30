@@ -29,22 +29,22 @@
               >
                 <v-expansion-panel-title class="fantasy-header">
                   <span class="text-h6">
-                    {{ category.emoji }} {{ category.name }} 
+                    {{ category.emoji }} {{ category.name }}
                     <v-chip class="ml-2" size="small" color="primary">{{ category.sections.length }}</v-chip>
                   </span>
                 </v-expansion-panel-title>
 
                 <v-expansion-panel-text class="fantasy-body">
                   <p class="mb-4 text-body-2">{{ category.description }}</p>
-                  
+
                   <!-- Section Grid -->
                   <v-row dense>
-                    <v-col 
-                      cols="6" 
-                      sm="4" 
-                      md="3" 
-                      lg="2" 
-                      v-for="section in category.sections" 
+                    <v-col
+                      cols="6"
+                      sm="4"
+                      md="3"
+                      lg="2"
+                      v-for="section in category.sections"
                       :key="section"
                     >
                       <v-btn
@@ -62,14 +62,14 @@
                   <!-- Bulk Navigation -->
                   <v-divider class="my-4"></v-divider>
                   <div class="text-center">
-                    <v-btn 
+                    <v-btn
                       class="fantasy-button ma-1"
                       @click="openRandomSection(category.sections)"
                       prepend-icon="mdi-shuffle"
                     >
                       Random {{ category.name }} Section
                     </v-btn>
-                    <v-btn 
+                    <v-btn
                       class="fantasy-button ma-1"
                       @click="openFirstFive(category.sections)"
                       prepend-icon="mdi-open-in-new"
@@ -95,8 +95,8 @@
                       @keyup.enter="goToSection"
                     >
                       <template #append>
-                        <v-btn 
-                          class="fantasy-button" 
+                        <v-btn
+                          class="fantasy-button"
                           @click="goToSection"
                           icon="mdi-arrow-right"
                           size="small"
@@ -105,14 +105,14 @@
                     </v-text-field>
                   </v-col>
                   <v-col cols="12" md="6">
-                    <v-btn 
+                    <v-btn
                       class="fantasy-button mr-2"
                       @click="openCharacterSheet"
                       prepend-icon="mdi-account"
                     >
                       Character Sheet
                     </v-btn>
-                    <v-btn 
+                    <v-btn
                       class="fantasy-button"
                       to="/game"
                       prepend-icon="mdi-home"
@@ -146,9 +146,9 @@ const quickSection = ref('')
 const interactionCategories = ref([
   {
     emoji: '🎲',
-    name: 'Luck Checks',
-    description: 'High-stakes random events that test player fortune with "ПРОВЕРЬТЕ СВОЮ УДАЧУ"',
-    sections: ['037', '067', '165', '249', '319', '399', '420', '483', '500', '506', '531', '568', '604', '612', '627']
+    name: 'Luck System',
+    description: 'Comprehensive luck mechanics: standard checks, restoration, penalties, and narrative references',
+    sections: ['037', '063', '064', '067', '085', '094', '165', '199', '212', '213', '249', '276', '319', '326', '329', '340', '341', '399', '413', '420', '483', '500', '506', '531', '548', '568', '604', '612', '627']
   },
   {
     emoji: '⚔️',
